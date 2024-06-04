@@ -1,5 +1,4 @@
 #pragma once
-
 #include <GLFW/glfw3.h>
 
 #define TIME_MANAGER TimeManager::Instance()

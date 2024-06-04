@@ -13,32 +13,52 @@ Camera::Camera()
     currentState = ORBIT;
 }
 
-void Camera::HandleKeyboardInput(GLFWwindow* window) 
+void Camera::ProfileView1Action()
 {
-    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-    {
-        SetCameraPosition(glm::vec3(0.5f, 2.f, 0.25f), glm::vec3(1.f, 2.f, 0.25f), 45);
+    SetCameraPosition(glm::vec3(0.5f, 2.f, 0.25f), glm::vec3(1.f, 2.f, 0.25f), 45);
 
-        currentState = PROFILE_VIEW_1;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-    {
-        SetCameraPosition(glm::vec3(1.f, 2.f, 0.f), glm::vec3(-1.f, 2.f, 0.f), 45);
+    currentState = PROFILE_VIEW_1;
+}
 
-        currentState = PROFILE_VIEW_2;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-    {
-        SetCameraPosition(glm::vec3(0.f, 2.f, 15.f), glm::vec3(0.f, 2.f, 0.f), 45);
+void Camera::ProfileView2Action()
+{
+    SetCameraPosition(glm::vec3(1.f, 2.f, 0.f), glm::vec3(-1.f, 2.f, 0.f), 45);
 
-        currentState = DOLLY_ZOOM;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-    {
-        SetCameraPosition(glm::vec3(0.f, 5.f, 10.f), glm::vec3(0.f), 45);
+    currentState = PROFILE_VIEW_2;
+}
 
-        currentState = ORBIT;
-    }
+void Camera::DollyZoomAction()
+{
+    SetCameraPosition(glm::vec3(0.f, 2.f, 15.f), glm::vec3(0.f, 2.f, 0.f), 45);
+
+    currentState = DOLLY_ZOOM;
+}
+
+void Camera::OrbitAction()
+{
+    SetCameraPosition(glm::vec3(0.f, 5.f, 10.f), glm::vec3(0.f), 45);
+
+    currentState = ORBIT;
+}
+
+void Camera::SetupCameraInputs()
+{
+    INPUT_MANAGER.SetupKey1Input([this]() {
+        ProfileView1Action();
+        });
+
+    INPUT_MANAGER.SetupKey2Input([this]() {
+        ProfileView2Action();
+        });
+
+    INPUT_MANAGER.SetupKey3Input([this]() {
+        DollyZoomAction();
+        });
+
+    INPUT_MANAGER.SetupKeySpaceInput([this]() {
+        OrbitAction();
+        });
+
 }
 
 void Camera::SetCameraPosition(glm::vec3 _position, glm::vec3 _target, float _fFov)
@@ -89,8 +109,6 @@ void Camera::Orbit(float deltaTime)
 
 void Camera::Update()
 {
-    TIME_MANAGER.Update();
-    HandleKeyboardInput(GLM.GetWindow());
     ApplyCameraState();
 
     glm::mat4 viewMatrix = glm::lookAt(transform.position /* Eye */, target /* Target */, localVectorUp /* Up */);

@@ -23,6 +23,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="GLManager.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelManager.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="GLManager.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelManager.h" />

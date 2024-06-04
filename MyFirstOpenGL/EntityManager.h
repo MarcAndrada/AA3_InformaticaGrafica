@@ -19,6 +19,7 @@ public:
 
 
 
+	inline Camera* GetCamera() { return (Camera*)entities[entities.size() - 1]; }
 	void InitializeEntities();
 	void EntitiesUpdate();
 
