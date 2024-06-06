@@ -19,6 +19,7 @@ private:
 	ModelManager& operator =(const ModelManager&) = delete;
 
 	std::vector<Model> models;
+
 public:
 	inline static ModelManager& Instance()
 	{
@@ -33,6 +34,7 @@ public:
 
 
 	inline Model GetModel(int _modelId) { return models[_modelId]; }
+	inline int GetTotalModels() { return models.size(); }
 
 };
 

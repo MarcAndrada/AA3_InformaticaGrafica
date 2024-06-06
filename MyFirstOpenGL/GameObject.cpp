@@ -8,7 +8,6 @@ GameObject::GameObject(GLuint _program, glm::vec3 _position, glm::vec3 _rotation
 	program = _program;
 	textureId = _textureId;
 	light = _light;
-	std::cout << _program << std::endl;
 }
 
 void GameObject::Update()
@@ -30,7 +29,6 @@ void GameObject::Update()
 	glUniformMatrix4fv(glGetUniformLocation(program, "rotationMatrix"), 1, GL_FALSE, glm::value_ptr(rotationMatrix));
 	glUniformMatrix4fv(glGetUniformLocation(program, "scaleMatrix"), 1, GL_FALSE, glm::value_ptr(scaleMatrix));
 
-	glUniform1i(glGetUniformLocation(program, "usingTexture"), 1);
 	glUniform3f(glGetUniformLocation(program, "ambientLight.color"), light.color.x, light.color.y, light.color.z);
 	glUniform1f(glGetUniformLocation(program, "ambientLight.ambientIntensity"), light.ambientIntensity);
 }

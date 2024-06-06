@@ -2,116 +2,121 @@
 
 Camera::Camera() 
 {
-    transform.position = glm::vec3(0.f, 5.f, 10.f);
+    transform.position = glm::vec3(0.f, 5.f, -10.f);
     target = glm::vec3(0.f, 0.f, 0.f);
-    localVectorUp = glm::vec3(0.f, 1.f, 0.f);
+    right = glm::vec3(-1.f, 0.f, 0.f);
+    up = glm::vec3(0.f, 1.f, 0.f);
+    forward = glm::vec3(0.f, 0.f, 1.f);
+
     fFov = 45.f;
     fNear = 0.1f;
     fFar = 100.f;
     movementSpeed = 5.f;
-    isOrbitating = true;
-    currentState = ORBIT;
-}
+    mouseSensitivity = 0.1f;
+    yaw = 0.f;
+    pitch = 0.f;
+    maxPitchAngle = 89.f;
 
-void Camera::ProfileView1Action()
-{
-    SetCameraPosition(glm::vec3(0.5f, 2.f, 0.25f), glm::vec3(1.f, 2.f, 0.25f), 45);
-
-    currentState = PROFILE_VIEW_1;
-}
-
-void Camera::ProfileView2Action()
-{
-    SetCameraPosition(glm::vec3(1.f, 2.f, 0.f), glm::vec3(-1.f, 2.f, 0.f), 45);
-
-    currentState = PROFILE_VIEW_2;
-}
-
-void Camera::DollyZoomAction()
-{
-    SetCameraPosition(glm::vec3(0.f, 2.f, 15.f), glm::vec3(0.f, 2.f, 0.f), 45);
-
-    currentState = DOLLY_ZOOM;
-}
-
-void Camera::OrbitAction()
-{
-    SetCameraPosition(glm::vec3(0.f, 5.f, 10.f), glm::vec3(0.f), 45);
-
-    currentState = ORBIT;
 }
 
 void Camera::SetupCameraInputs()
 {
-    INPUT_MANAGER.SetupKey1Input([this]() {
-        ProfileView1Action();
+    //Asignamos la funcion que hara cada input usando una lambda
+
+    INPUT_MANAGER.SetupKeyWInputPressed([this]() {
+        movingForward = true;
+        });
+    INPUT_MANAGER.SetupKeyWInputReleased([this]() {
+        movingForward = false;
         });
 
-    INPUT_MANAGER.SetupKey2Input([this]() {
-        ProfileView2Action();
+
+    INPUT_MANAGER.SetupKeySInputPressed([this]() {
+        movingBackwards = true;
+        });
+    INPUT_MANAGER.SetupKeySInputReleased([this]() {
+        movingBackwards = false;
         });
 
-    INPUT_MANAGER.SetupKey3Input([this]() {
-        DollyZoomAction();
+    INPUT_MANAGER.SetupKeyAInputPressed([this]() {
+        movingLeft = true;
+        });
+    INPUT_MANAGER.SetupKeyAInputReleased([this]() {
+        movingLeft = false;
         });
 
-    INPUT_MANAGER.SetupKeySpaceInput([this]() {
-        OrbitAction();
+    INPUT_MANAGER.SetupKeyDInputPressed([this]() {
+        movingRight = true;
+        });
+    INPUT_MANAGER.SetupKeyDInputReleased([this]() {
+        movingRight = false;
         });
 
 }
 
-void Camera::SetCameraPosition(glm::vec3 _position, glm::vec3 _target, float _fFov)
+
+void Camera::RotateBehaviour()
 {
-    transform.position = _position;
-    target = _target;
-    fFov = _fFov;
+    glm::vec2 mouseDistanceTraveled = INPUT_MANAGER.GetCursorDistanceTraveled(GLM.GetWindow());
+
+    glm::vec2 mouseOffset = mouseDistanceTraveled * mouseSensitivity;
+
+    yaw += mouseOffset.x;
+    pitch += mouseOffset.y;
+    if (pitch > maxPitchAngle)
+        pitch = maxPitchAngle;
+    else if (pitch < -maxPitchAngle)
+        pitch = -maxPitchAngle;
+
+    glm::vec3 tmpForward;
+    tmpForward.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    tmpForward.y = sin(glm::radians(pitch));
+    tmpForward.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    
+    forward = glm::normalize(tmpForward);
+    
+    glm::vec3 tmpRight;
+    float rightYaw = yaw + 90;
+    tmpRight.x = cos(glm::radians(rightYaw)) * cos(glm::radians(0.f));
+    tmpRight.y = sin(glm::radians(0.f));
+    tmpRight.z = sin(glm::radians(rightYaw)) * cos(glm::radians(0.f));
+    
+    right = glm::normalize(tmpRight);
 }
 
-void Camera::ApplyCameraState()
+void Camera::MoveBehaviour()
 {
     float deltaTime = TIME_MANAGER.GetDeltaTime();
 
-    switch (currentState) {
-    case PROFILE_VIEW_1:
-    case PROFILE_VIEW_2:
-        break;
-    case DOLLY_ZOOM:
-        fFov += movementSpeed * deltaTime;
-        transform.position.z -= movementSpeed * deltaTime;
+    //Asignarle la posicion segun los inputs apretados
+    transform.position += (CalculateMovementSpeed() * deltaTime);
         
-        if (fFov >= 60)
-        {
-            SetCameraPosition(glm::vec3(0.f, 5.f, 10.f), glm::vec3(0.f), 45);
-
-            currentState = ORBIT;
-        }
-
-        break;
-    case ORBIT:
-    default:
-        Orbit(deltaTime);
-        break;
-    }
 }
 
-void Camera::Orbit(float deltaTime)
+glm::vec3 Camera::CalculateMovementSpeed()
 {
-    float angle = 0.5f * deltaTime;
-    glm::vec3 relativePos = transform.position - target;
+    glm::vec3 movementDirection = glm::vec3(0.f);
 
-    float newX = cos(angle) * relativePos.x - sin(angle) * relativePos.z;
-    float newZ = sin(angle) * relativePos.x + cos(angle) * relativePos.z;
+    if (movingForward)
+        movementDirection += forward * movementSpeed;
+    if (movingBackwards)
+        movementDirection -= forward * movementSpeed;
+    if (movingRight)
+        movementDirection += right * movementSpeed;
+    if (movingLeft)
+        movementDirection -= right * movementSpeed;
 
-    transform.position.x = target.x + newX;
-    transform.position.z = target.z + newZ;
+ 
+    return movementDirection;
 }
+
 
 void Camera::Update()
 {
-    ApplyCameraState();
+    RotateBehaviour();
+    MoveBehaviour();
 
-    glm::mat4 viewMatrix = glm::lookAt(transform.position /* Eye */, target /* Target */, localVectorUp /* Up */);
+    glm::mat4 viewMatrix = glm::lookAt(transform.position /* Eye */, transform.position + forward /* Target */, up /* Up */);
 
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(fFov), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, fNear, fFar);
 

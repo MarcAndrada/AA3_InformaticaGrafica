@@ -1,5 +1,7 @@
 #pragma once
+#include "GLManager.h"
 #include <GLFW/glfw3.h>
+#include <glm.hpp>
 #include <functional>
 
 #define INPUT_MANAGER InputManager::Instance()
@@ -7,15 +9,21 @@
 class InputManager
 {
 private:
-	InputManager() = default;
+	InputManager();
 
 	InputManager(const InputManager&) = delete;
 	InputManager& operator =(const InputManager&) = delete;
 
-	std::function<void()> key1Action;
-	std::function<void()> key2Action;
-	std::function<void()> key3Action;
-	std::function<void()> keySpaceAction;
+	std::function<void()> keyWPressAction;
+	std::function<void()> keyWReleaseAction;
+	std::function<void()> keySPressAction;
+	std::function<void()> keySReleaseAction;
+	std::function<void()> keyAPressAction;
+	std::function<void()> keyAReleaseAction;
+	std::function<void()> keyDPressAction;
+	std::function<void()> keyDReleaseAction;
+
+	glm::vec2 lastMousePos;
 
 public:
 	inline static InputManager& Instance()
@@ -26,10 +34,15 @@ public:
 
 	void CheckInputs(GLFWwindow* window);
 
-	void SetupKey1Input(std::function<void()> _action);
-	void SetupKey2Input(std::function<void()> _action);
-	void SetupKey3Input(std::function<void()> _action);
-	void SetupKeySpaceInput(std::function<void()> _action);
+	void SetupKeyWInputPressed(std::function<void()> _action);
+	void SetupKeyWInputReleased(std::function<void()> _action);
+	void SetupKeySInputPressed(std::function<void()> _action);
+	void SetupKeySInputReleased(std::function<void()> _action);
+	void SetupKeyAInputPressed(std::function<void()> _action);
+	void SetupKeyAInputReleased(std::function<void()> _action);
+	void SetupKeyDInputPressed(std::function<void()> _action);
+	void SetupKeyDInputReleased(std::function<void()> _action);
 
+	glm::vec2 GetCursorDistanceTraveled(GLFWwindow* _window);
 };
 

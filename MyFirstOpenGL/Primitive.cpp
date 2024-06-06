@@ -2,7 +2,6 @@
 
 Primitive::Primitive(GLuint _program, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, glm::vec4 _color, Light _light)
 {
-	std::cout << _program << std::endl;
 	program = _program;
 	transform = Transform(_position, _rotation, _scale);
 	light = _light;
@@ -80,10 +79,7 @@ void Primitive::Update()
 	glUniformMatrix4fv(glGetUniformLocation(program, "scaleMatrix"), 1, GL_FALSE, glm::value_ptr(scaleMatrix));
 
 	glUniform4f(glGetUniformLocation(program, "baseColor"), color.x, color.y, color.z, color.w);
-	glUniform1i(glGetUniformLocation(program, "usingTexture"), 0);
-	glUniform3f(glGetUniformLocation(program, "ambientLight.color"), light.color.x, light.color.y, light.color.z);
-	glUniform1f(glGetUniformLocation(program, "ambientLight.ambientIntensity"), light.ambientIntensity);
-}
+	}
 
 void Primitive::Render()
 {

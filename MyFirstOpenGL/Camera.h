@@ -20,35 +20,26 @@ public:
     void Update() override;
     void Render() override {}
 private:
-    enum CameraState {
-        PROFILE_VIEW_1,
-        PROFILE_VIEW_2,
-        DOLLY_ZOOM,
-        ORBIT
-    };
-
-    CameraState currentState = ORBIT;
 
     glm::vec3 target;
-    glm::vec3 localVectorUp;
 
-    float fFov;
-    float fNear;
-    float fFar;
-
-    float movementSpeed;
-
-    bool isOrbitating = true;
+    glm::vec3 up;
+    glm::vec3 forward;
+    glm::vec3 right;
 
 
-    void ProfileView1Action();
-    void ProfileView2Action();
-    void DollyZoomAction();
-    void OrbitAction();
+    float fFov, fNear, fFar;
+    float movementSpeed, mouseSensitivity, yaw, pitch, maxPitchAngle;
 
-    void SetCameraPosition(glm::vec3 _position, glm::vec3 _target, float _fFov);
+    bool movingForward;
+    bool movingBackwards;
+    bool movingRight;
+    bool movingLeft;
 
-    void ApplyCameraState();
 
-    void Orbit(float deltaTime);
+    void RotateBehaviour();
+    void MoveBehaviour();
+    
+
+    glm::vec3 CalculateMovementSpeed();
 };

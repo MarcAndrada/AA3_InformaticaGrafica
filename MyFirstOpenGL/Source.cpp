@@ -25,6 +25,8 @@
 
 void main() {
 
+	srand(time(NULL));
+
 	GLM.Init();
 
 	TEXTURES.InitTextures();
@@ -39,7 +41,7 @@ void main() {
 		MODELS.LoadAllModels();
 
 		//Inicializamos todos los gameobjects del juego
-		ENTITIES.InitializeEntities();
+		ENTITIES.Initialize();
 		ENTITIES.GetCamera()->SetupCameraInputs();
 
 		//Activamos el Depth test con lo que arreglamos el Z Fighting
