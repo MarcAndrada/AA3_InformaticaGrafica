@@ -1,6 +1,7 @@
 #include "InputManager.h"
 
 #include <iostream>
+
 InputManager::InputManager() 
 {
     double x, y;
@@ -45,6 +46,15 @@ void InputManager::CheckInputs(GLFWwindow* window)
     {
         keyDReleaseAction();
     }
+    
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+    {
+        keyFPressAction();
+    }
+    else if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
+    {
+        keyFReleaseAction();
+    }
 
 }
 
@@ -82,6 +92,15 @@ void InputManager::SetupKeyDInputPressed(std::function<void()> _action)
 void InputManager::SetupKeyDInputReleased(std::function<void()> _action)
 {
     keyDReleaseAction = _action;
+}
+
+void InputManager::SetupKeyFInputPressed(std::function<void()> _action)
+{
+    keyFPressAction = _action;
+}
+void InputManager::SetupKeyFInputReleased(std::function<void()> _action)
+{
+    keyFReleaseAction = _action;
 }
 
 glm::vec2 InputManager::GetCursorDistanceTraveled(GLFWwindow* _window)

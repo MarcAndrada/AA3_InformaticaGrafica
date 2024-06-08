@@ -1,8 +1,9 @@
 #pragma once
 
+#include "GLManager.h"
+#include "DayCicleManager.h"
 #include "Model.h"
 #include "Entity.h"
-#include "GLManager.h"
 #include "Light.h"
 
 class GameObject : public Entity

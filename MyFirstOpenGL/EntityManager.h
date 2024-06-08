@@ -6,6 +6,7 @@
 #include "Primitive.h"
 #include "Camera.h"
 #include "ModelManager.h"
+#include "DayCicleManager.h"
 
 #define ENTITIES EntityManager::Instance()
 
@@ -33,7 +34,7 @@ private:
 	std::vector<glm::vec3> spawnPoints;
 	std::vector<bool> usedSpawnPoint;
 
-
+	void InitializeSunAndMoon();
 	void InitializeSpawnPoints();
 	void InitializeEntities();
 	glm::vec3 GetRandomUnusedPosition();

@@ -31,6 +31,9 @@ void GameObject::Update()
 
 	glUniform3f(glGetUniformLocation(program, "ambientLight.color"), light.color.x, light.color.y, light.color.z);
 	glUniform1f(glGetUniformLocation(program, "ambientLight.ambientIntensity"), light.ambientIntensity);
+	
+	glm::vec3 higherSatelite = DAY_MANAGER.GetRisedSatelite();
+	glUniform3f(glGetUniformLocation(program, "sourceLight"), higherSatelite.x, higherSatelite.y, higherSatelite.z);
 }
 
 void GameObject::Render()

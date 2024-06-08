@@ -18,11 +18,13 @@ private:
 
 
 public:
-	Primitive(GLuint _program, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, glm::vec4 _color, Light _light);
+	Primitive(GLuint _program, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, glm::vec4 _color);
 
 
 	void InitPrimitive();
 	void Update() override;
 	void Render() override;
+
+	inline glm::vec4 GetColor() { return color; }
 };
 

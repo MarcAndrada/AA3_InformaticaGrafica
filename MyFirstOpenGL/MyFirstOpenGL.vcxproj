@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DayCicleManager.cpp" />
+    <ClCompile Include="FlashLightManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="GLManager.cpp" />
@@ -45,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DayCicleManager.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="FlashLightManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="GLManager.h" />

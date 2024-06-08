@@ -18,7 +18,9 @@ public:
 
     void SetupCameraInputs();
     void Update() override;
-    void Render() override {}
+    void Render() override;
+
+    inline glm::vec3 GetForward() { return forward; }
 private:
 
     glm::vec3 target;

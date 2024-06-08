@@ -127,3 +127,7 @@ void Camera::Update()
         glUniformMatrix4fv(glGetUniformLocation(program, "projectionMatrix"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     }    
 }
+
+void Camera::Render()
+{
+}

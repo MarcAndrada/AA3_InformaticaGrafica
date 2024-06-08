@@ -19,6 +19,8 @@
 #include "TextureManager.h"
 #include "TimeManager.h"
 #include "InputManager.h"
+#include "DayCicleManager.h"
+#include "FlashLightManager.h"
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
@@ -43,6 +45,8 @@ void main() {
 		//Inicializamos todos los gameobjects del juego
 		ENTITIES.Initialize();
 		ENTITIES.GetCamera()->SetupCameraInputs();
+
+		FLASHLIGHT.InitializeFlashLight(ENTITIES.GetCamera());
 
 		//Activamos el Depth test con lo que arreglamos el Z Fighting
 		glEnable(GL_DEPTH_TEST);  
@@ -69,6 +73,8 @@ void main() {
 
 			TIME_MANAGER.Update();
 
+			DAY_MANAGER.DayCycleUpdate(TIME_MANAGER.GetDeltaTime());
+			FLASHLIGHT.Update();
 			ENTITIES.EntitiesUpdate();
 
 			GLM.ChangeBuffers();

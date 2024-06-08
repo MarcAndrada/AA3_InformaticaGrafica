@@ -1,10 +1,9 @@
 #include "Primitive.h"
 
-Primitive::Primitive(GLuint _program, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, glm::vec4 _color, Light _light)
+Primitive::Primitive(GLuint _program, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, glm::vec4 _color)
 {
 	program = _program;
 	transform = Transform(_position, _rotation, _scale);
-	light = _light;
 	color = _color;
 
 	points = {

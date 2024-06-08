@@ -2,13 +2,23 @@
 
 void EntityManager::Initialize()
 {
+
+	InitializeSunAndMoon();
+
 	InitializeSpawnPoints();
 
 	InitializeEntities();
 
+	//Suelo
+	entities.push_back(new Primitive(
+		PROGRAMS.GetCompiledPrograms()[1], //Programa
+		glm::vec3(0.f, -1.f, 0.f), //Posicion
+		glm::vec3(0.f, 1.f, 0.f), //Rotacion
+		glm::vec3(10.f, 1.f, 10.f), //Escala
+		glm::vec4(0.7f, 0.5f, 0.f,1.f)) //Color
+	); 
 
-	entities.push_back(new Primitive(PROGRAMS.GetCompiledPrograms()[1], glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 1.f, 0.f), glm::vec3(10.f, 1.f, 10.f), glm::vec4(0.7f, 0.5f, 0.f, 1.f), Light(0.3f, 0.3f, 0.3f, 1.f))); //Suelo
-
+	//Camara
 	entities.push_back(new Camera());
 }
 
@@ -19,6 +29,30 @@ void EntityManager::EntitiesUpdate()
 		item->Update();
 		item->Render();
 	}
+
+}
+
+void EntityManager::InitializeSunAndMoon()
+{
+	Primitive* sun = new Primitive(
+		PROGRAMS.GetCompiledPrograms()[1], //Programa
+		glm::vec3(0.f, 0.f, 0.f), //Posicion
+		glm::vec3(0.f, 1.f, 0.f), //Rotacion
+		glm::vec3(0.3f, 0.3f, 0.3f), //Escala
+		glm::vec4(1.f, 0.98f, 0.17f, 3.f)//Color
+	); 
+	entities.push_back(sun);
+
+	Primitive* moon = new Primitive(
+		PROGRAMS.GetCompiledPrograms()[1], //Programa
+		glm::vec3(0.f, 0.f, 0.f), //Posicion
+		glm::vec3(0.f, 1.f, 0.f), //Rotacion
+		glm::vec3(0.3f, 0.3f, 0.3f), //Escala
+		glm::vec4(0.66f, 0.74f, 1.f, 3.f) //Color
+	);
+	entities.push_back(moon);
+
+	DAY_MANAGER.InitializeSunAndMoon(sun, moon);
 
 }
 
@@ -41,7 +75,6 @@ void EntityManager::InitializeSpawnPoints()
 }
 void EntityManager::InitializeEntities()
 {
-
 	int modelsInScene = 3;
 	int programId = 0;
 	int totalModels = MODELS.GetTotalModels();
@@ -56,7 +89,7 @@ void EntityManager::InitializeEntities()
 		float minScale = 0.6f;
 		int maxScale = 1;
 		//Generar una escala random entre 0.5 y 3.5 (es solo un float para que sea uniforme)
-		float randomScale = (float)(rand() % (int)maxScale) + minScale;
+		float randomScale = (float)(rand() % maxScale) + minScale;
 
 		entities.push_back(
 			new GameObject(PROGRAMS.GetCompiledPrograms()[programId],
@@ -64,14 +97,9 @@ void EntityManager::InitializeEntities()
 				glm::vec3(0.f, rand() % 360, 0.f), //Generar rotacion random
 				glm::vec3(randomScale), //Aplicar escala random
 				MODELS.GetModel(currentModelAndTexture),
-				Light(1.f, 1.f, 1.f, 1.f), 
+				Light(1.f, 1.f, 1.f, 0.1f),
 				currentModelAndTexture));
 	}
-	
-
-
-
-
 }
 
 glm::vec3 EntityManager::GetRandomUnusedPosition()

@@ -23,6 +23,9 @@ private:
 	std::function<void()> keyDPressAction;
 	std::function<void()> keyDReleaseAction;
 
+	std::function<void()> keyFPressAction;
+	std::function<void()> keyFReleaseAction;
+
 	glm::vec2 lastMousePos;
 
 public:
@@ -42,6 +45,8 @@ public:
 	void SetupKeyAInputReleased(std::function<void()> _action);
 	void SetupKeyDInputPressed(std::function<void()> _action);
 	void SetupKeyDInputReleased(std::function<void()> _action);
+	void SetupKeyFInputPressed(std::function<void()> _action);
+	void SetupKeyFInputReleased(std::function<void()> _action);
 
 	glm::vec2 GetCursorDistanceTraveled(GLFWwindow* _window);
 };
