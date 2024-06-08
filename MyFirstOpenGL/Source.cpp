@@ -44,8 +44,10 @@ void main() {
 
 		//Inicializamos todos los gameobjects del juego
 		ENTITIES.Initialize();
+		//Setupeamos los inputs de la camara
 		ENTITIES.GetCamera()->SetupCameraInputs();
 
+		//Inicializamos la linterna
 		FLASHLIGHT.InitializeFlashLight(ENTITIES.GetCamera());
 
 		//Activamos el Depth test con lo que arreglamos el Z Fighting
@@ -69,12 +71,19 @@ void main() {
 			//Limpiamos los buffers
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			
+			//Comprobamos los inputs
 			INPUT_MANAGER.CheckInputs(GLM.GetWindow());
-
+			
+			//Calculamos el tiempo que esta pasando
 			TIME_MANAGER.Update();
 
+			//Calculamos el ciclo dia y noche
 			DAY_MANAGER.DayCycleUpdate(TIME_MANAGER.GetDeltaTime());
+
+			//Enviamos los datos de la linterna al shader
 			FLASHLIGHT.Update();
+
+			//Hacemos el update y render de todas nuestras entidades
 			ENTITIES.EntitiesUpdate();
 
 			GLM.ChangeBuffers();

@@ -6,6 +6,7 @@ Primitive::Primitive(GLuint _program, glm::vec3 _position, glm::vec3 _rotation, 
 	transform = Transform(_position, _rotation, _scale);
 	color = _color;
 
+	//Puntos para que nuestra primitiva sea un cubo
 	points = {
 				-1.f, +1.f, -1.f,
 				+1.f, +1.f, -1.f,
@@ -61,8 +62,10 @@ void Primitive::InitPrimitive()
 
 void Primitive::Update()
 {
+	//Usamos el programa de nuestra primitiva
 	glUseProgram(program);
 
+	//Calculamos las matrices de translacion de nuestra primitiva
 	glm::mat4 translationMatrix = Transform::GenerateTranslationMatrix(transform.position);
 	glm::mat4 rotationMatrix = Transform::GenerateRotationMatrix(transform.rotation, transform.rotation.x);
 	rotationMatrix *= Transform::GenerateRotationMatrix(transform.rotation, transform.rotation.y);
@@ -77,8 +80,9 @@ void Primitive::Update()
 	glUniformMatrix4fv(glGetUniformLocation(program, "rotationMatrix"), 1, GL_FALSE, glm::value_ptr(rotationMatrix));
 	glUniformMatrix4fv(glGetUniformLocation(program, "scaleMatrix"), 1, GL_FALSE, glm::value_ptr(scaleMatrix));
 
+	//Pasarle el color al shader
 	glUniform4f(glGetUniformLocation(program, "baseColor"), color.x, color.y, color.z, color.w);
-	}
+}
 
 void Primitive::Render()
 {

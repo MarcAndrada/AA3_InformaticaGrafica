@@ -20,13 +20,17 @@ void FlashLightManager::Update()
 {
 	GLuint program = PROGRAMS.GetCompiledPrograms()[0];
 
+	//Empezamos a utilizar el programa que toca
 	glUseProgram(program);
+
 	//Le pasamos si la linterna esta encendido o no
 	glUniform1i(glGetUniformLocation(program, "flashlightOn"), flashLightOn);
+
 	//Le pasamos las variables de la camara
 	glUniform3f(glGetUniformLocation(program, "cameraPosition"), camera->transform.position.x, camera->transform.position.y, camera->transform.position.z);
 	glUniform3f(glGetUniformLocation(program, "cameraForward"), camera->GetForward().x, camera->GetForward().y, camera->GetForward().z);
 
+	//Le pasamos las variables de los angulos de camara
 	glUniform1f(glGetUniformLocation(program, "innerAngle"), innerAngle);
 	glUniform1f(glGetUniformLocation(program, "outerAngle"), outerAngle);
 

@@ -6,7 +6,6 @@ void ModelManager::LoadAllModels()
 	models.push_back(LoadOBJModel("Assets/Models/troll.obj"));
 	models.push_back(LoadOBJModel("Assets/Models/rock.obj"));
 	models.push_back(LoadOBJModel("Assets/Models/Cone.obj"));
-	//models.push_back(LoadOBJModel("Assets/Models/Axe.obj"));
 }
 
 Model ModelManager::LoadOBJModel(const std::string& filePath)

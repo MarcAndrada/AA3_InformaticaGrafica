@@ -42,8 +42,8 @@
   <ItemGroup>
     <None Include="PrimitivesFragmentShader.glsl" />
     <None Include="ObjectsFragmentShader.glsl" />
-    <None Include="MyFirstGeometryShader.glsl" />
-    <None Include="MyFirstVertexShader.glsl" />
+    <None Include="GeometryShader.glsl" />
+    <None Include="VertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />

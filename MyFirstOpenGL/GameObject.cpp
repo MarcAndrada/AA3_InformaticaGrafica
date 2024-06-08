@@ -12,8 +12,10 @@ GameObject::GameObject(GLuint _program, glm::vec3 _position, glm::vec3 _rotation
 
 void GameObject::Update()
 {
+	//Usamos el programa de este objeto
 	glUseProgram(program);
 
+	//Generamos las matrices de translacion
 	glm::mat4 translationMatrix = Transform::GenerateTranslationMatrix(transform.position);
 	glm::mat4 rotationMatrix = Transform::GenerateRotationMatrix(transform.rotation, transform.rotation.x);
 	rotationMatrix *= Transform::GenerateRotationMatrix(transform.rotation, transform.rotation.y);
@@ -29,9 +31,11 @@ void GameObject::Update()
 	glUniformMatrix4fv(glGetUniformLocation(program, "rotationMatrix"), 1, GL_FALSE, glm::value_ptr(rotationMatrix));
 	glUniformMatrix4fv(glGetUniformLocation(program, "scaleMatrix"), 1, GL_FALSE, glm::value_ptr(scaleMatrix));
 
+	//Le pasamos las variables de la luz ambiental al shader
 	glUniform3f(glGetUniformLocation(program, "ambientLight.color"), light.color.x, light.color.y, light.color.z);
 	glUniform1f(glGetUniformLocation(program, "ambientLight.ambientIntensity"), light.ambientIntensity);
 	
+	//Le pasamos la posicion del "Satelite" que toque
 	glm::vec3 higherSatelite = DAY_MANAGER.GetRisedSatelite();
 	glUniform3f(glGetUniformLocation(program, "sourceLight"), higherSatelite.x, higherSatelite.y, higherSatelite.z);
 }
@@ -42,7 +46,7 @@ void GameObject::Render()
 	//Vinculo su VAO para ser usado
 	glBindVertexArray(model.VAO);
 
-	// Dibujamos
+	//Dibujamos
 	glDrawArrays(GL_TRIANGLES, 0, model.numVertexs);
 
 	//Desvinculamos VAO

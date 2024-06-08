@@ -32,6 +32,7 @@ void DayCicleManager::DayCycleUpdate(float _deltaTime)
 
 void DayCicleManager::Orbit(Primitive* _target, float _initialAngle, float _deltaTime)
 {
+    //Calculamso el angulo en radianes
     float currentAngle = _initialAngle + 2 * PI * timePassed;
 
     glm::vec3 newPos = glm::vec3(
@@ -68,11 +69,10 @@ void DayCicleManager::SendLightToShader()
     //Enviar el tiempo
     float currentAngle = 2 * PI * timePassed;
     float angleSin = sin(currentAngle);
+
     // El seno nos da un valor de -1 a 1 
     // Lo dividiremos entre 2 para que nos de entre -0.5 y 0.5
     // Y luego le sumamos 0.5 para que nos de de 0 a 1
     float lerpTime = (angleSin / 2) + 0.5f;
     glUniform1f(glGetUniformLocation(program, "lerpTime"), lerpTime);
-
-    std::cout << lerpTime << std::endl;
 }

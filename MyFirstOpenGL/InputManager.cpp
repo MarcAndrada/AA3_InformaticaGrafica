@@ -11,6 +11,9 @@ InputManager::InputManager()
 
 void InputManager::CheckInputs(GLFWwindow* window)
 {
+    //Comprobamos por cada tecla si esta presionada o no
+    //Se llamara a un std::function que tiene una funcion lambda ya previamente asignada
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
         keyWPressAction();
@@ -105,17 +108,17 @@ void InputManager::SetupKeyFInputReleased(std::function<void()> _action)
 
 glm::vec2 InputManager::GetCursorDistanceTraveled(GLFWwindow* _window)
 {
-
     double x, y;
 
+    //Obtenemos la posicion actual del raton
     glfwGetCursorPos(_window, &x, &y);
     glm::vec2 newMousePos = glm::vec2(x, y);
 
-
+    //Calculamos la diferencia de posicion que hay entre la posicion que tenemos guardada y la nueva
     glm::vec2 mouseDistance = glm::vec2(newMousePos.x - lastMousePos.x, lastMousePos.y - newMousePos.y);
 
     lastMousePos = newMousePos;
-    
+        
     return mouseDistance;
 }
 

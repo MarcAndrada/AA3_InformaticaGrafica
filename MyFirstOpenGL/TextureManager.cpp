@@ -8,8 +8,6 @@ void TextureManager::InitTextures()
 	textures[1].InitTexture("Assets/Textures/rock.png");
 	textures.push_back(Texture());
 	textures[2].InitTexture("Assets/Textures/Cone.png");
-	//textures.push_back(Texture());
-	//textures[3].InitTexture("Assets/Textures/Axe.png");
 }
 
 void TextureManager::LoadTextures()

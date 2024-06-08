@@ -12,7 +12,7 @@ Camera::Camera()
     fNear = 0.1f;
     fFar = 100.f;
     movementSpeed = 5.f;
-    mouseSensitivity = 0.1f;
+    mouseSensitivity = 0.3f;
     yaw = 0.f;
     pitch = 0.f;
     maxPitchAngle = 89.f;
@@ -57,17 +57,22 @@ void Camera::SetupCameraInputs()
 
 void Camera::RotateBehaviour()
 {
+    //Obtenemos la distancia del mouse desde el ultimo frame
     glm::vec2 mouseDistanceTraveled = INPUT_MANAGER.GetCursorDistanceTraveled(GLM.GetWindow());
 
+    //Calculamos lo que se ha movido el mouse con la sensibilidad que utlizamos
     glm::vec2 mouseOffset = mouseDistanceTraveled * mouseSensitivity;
 
+    //Lo agregamos al pitch y al yaw
     yaw += mouseOffset.x;
     pitch += mouseOffset.y;
+    //Capamos que el pitch no pase de cierto angulo para que la camara no empiece a rotar a lo loco
     if (pitch > maxPitchAngle)
         pitch = maxPitchAngle;
     else if (pitch < -maxPitchAngle)
         pitch = -maxPitchAngle;
-
+    
+    //Calculamos el forward con la nueva rotacion
     glm::vec3 tmpForward;
     tmpForward.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     tmpForward.y = sin(glm::radians(pitch));
@@ -75,6 +80,7 @@ void Camera::RotateBehaviour()
     
     forward = glm::normalize(tmpForward);
     
+    //Calculamos el vector right con la nueva rotacion
     glm::vec3 tmpRight;
     float rightYaw = yaw + 90;
     tmpRight.x = cos(glm::radians(rightYaw)) * cos(glm::radians(0.f));
@@ -83,7 +89,6 @@ void Camera::RotateBehaviour()
     
     right = glm::normalize(tmpRight);
 }
-
 void Camera::MoveBehaviour()
 {
     float deltaTime = TIME_MANAGER.GetDeltaTime();
@@ -116,10 +121,13 @@ void Camera::Update()
     RotateBehaviour();
     MoveBehaviour();
 
+    //Calculamos la matriz de visionado a traves de la posicion y los vectores calculados anteriormente
     glm::mat4 viewMatrix = glm::lookAt(transform.position /* Eye */, transform.position + forward /* Target */, up /* Up */);
-
+    
+    //Calculamos la matriz de proyeccion de una camara en perspectiva
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(fFov), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, fNear, fFar);
 
+    //Le pasamos estas matrices a todos nues tros programas
     for (GLuint program : PROGRAMS.GetCompiledPrograms())
     {
         glUseProgram(program);
@@ -130,4 +138,5 @@ void Camera::Update()
 
 void Camera::Render()
 {
+    //No renderizamos la camara
 }
